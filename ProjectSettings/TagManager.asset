@@ -39,6 +39,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Clouds
+    uniqueID: 1252016107
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

@@ -4,32 +4,34 @@ using UnityEngine;
 
 public class BirdScript : MonoBehaviour
 {
-
     public Rigidbody2D myRigidBody;
-    public float flapStrength;
+    public float flapStrength = 5f;  // Adjust this value to lower the bird's jump height
     public LogicScript logic;
     public bool birdIsAlive = true;
 
-    // Define fixed boundary values
     public float upperBoundary = 5f;
     public float lowerBoundary = -5f;
 
-    // Start is called before the first frame update
+    private bool gameStarted = false;
+
+    void Awake()
+    {
+        myRigidBody = GetComponent<Rigidbody2D>();
+        myRigidBody.gravityScale = 0; // Disable gravity as soon as the object awakens
+    }
+
     void Start()
     {
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
-
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) == true && birdIsAlive)
+        if (gameStarted && Input.GetKeyDown(KeyCode.Space) && birdIsAlive)
         {
             myRigidBody.velocity = Vector2.up * flapStrength;
         }
 
-        // Constrain bird position within the fixed boundaries
         if (transform.position.y > upperBoundary)
         {
             Vector3 pos = transform.position;
@@ -42,7 +44,12 @@ public class BirdScript : MonoBehaviour
             pos.y = lowerBoundary;
             transform.position = pos;
         }
+    }
 
+    public void StartGame()
+    {
+        gameStarted = true;
+        myRigidBody.gravityScale = 5; // Enable gravity when the game starts
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -51,3 +58,4 @@ public class BirdScript : MonoBehaviour
         birdIsAlive = false;
     }
 }
+
